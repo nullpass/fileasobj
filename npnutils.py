@@ -123,3 +123,53 @@ def logger(event,thisFile):
     else:
         return False
     return True
+    
+    
+    
+def file_is_old_enough(thisPath,thisFile,ageDiff):
+    """
+    Check that a given file was modified within the past 'ageDiff' 
+    seconds, if so return True.
+    
+    This function will replace new_discards() and provide debug output 
+    to match the current code in stop_spam_vux() and stop_spam_domains()
+    The code in those two functions will be updated to instead use this
+    function.
+
+    Accepts:
+    thisPath - string, /-terminated path to thisFile  
+    thisFile - string, name of file to check (no path)
+    ageDiff - int, number of seconds in the past to define an acceptable
+                age difference.
+    
+    Returns:
+    BOOLEAN
+    
+    Outputs:
+    debug output
+    
+    Todo:
+    Decide how to handle file-not-found error, currently execution stops
+    which is acceptable.
+    
+    Example:
+    if file_is_old_enough("/tmp/","foo.txt",300):
+        echo "/tmp/foo.txt was modified in the past 5 minutes"
+    """
+    #
+    #when the given inbox file was last changed.
+    mtimeOfFile = int(os.path.getmtime(thisPath+thisFile))
+    #
+    #the current time as a integer
+    currTime = int(time.time())
+    #
+    #the difference between last change date and now, as a int.
+    timeDiff = currTime - mtimeOfFile
+    #
+    #list the current from_domains file and its time information.
+    bark("file="+thisFile+" now="+str(currTime)+" mtime="+str(mtimeOfFile)+" diff="+str(timeDiff)+" threshold="+str(ageDiff))
+    #
+    #if file is new enough to be considered valid...
+    if int(time.time()) - int(os.path.getmtime(thisPath+thisFile)) <= int(ageDiff):
+        return True
+    return False    

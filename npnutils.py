@@ -44,7 +44,7 @@ def bark(a):
     
     
     
-    def require_path(p):
+def require_path(p):
     """
     Require a path (diretory or file) and halt execution if it's not
     present.

@@ -96,3 +96,30 @@ def require_create_path(p):
                 bark("FATAL Failed to create required file \""+p+"\"")
                 sys.exit(10)
     return
+
+
+def logger(event,thisFile):
+    """
+    Lovingly write a given event as string to file by file name.
+    
+    Accepts:
+    event - str, message to log
+    thisFile - str, full path to the file to log to.
+    
+    Returns:
+    BOOLEAN
+    
+    Outputs:
+    none
+
+    """
+    if os.path.exists(thisFile):
+        try:
+            f = open(thisFile, 'a')
+            f.write(event + '\n')
+            f.close()
+        except:
+            return False
+    else:
+        return False
+    return True

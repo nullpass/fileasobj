@@ -130,11 +130,6 @@ def file_is_old_enough(thisPath,thisFile,ageDiff):
     """
     Check that a given file was modified within the past 'ageDiff' 
     seconds, if so return True.
-    
-    This function will replace new_discards() and provide debug output 
-    to match the current code in stop_spam_vux() and stop_spam_domains()
-    The code in those two functions will be updated to instead use this
-    function.
 
     Accepts:
     thisPath - string, /-terminated path to thisFile  

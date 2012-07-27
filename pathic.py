@@ -7,16 +7,17 @@
     by: nullpass, 2012
 
 """
-___version___="1.0.1"
+___version___="2.0.0"
 import random
 import time
 import datetime
+from sys import argv
 
 def planter():
     """
     Create an integer for random.seed to use without using any random methods.
     
-    %f   Microsecond as a decimal number [0,999999], zero-padded on the left
+    %f 	Microsecond as a decimal number [0,999999], zero-padded on the left
     
     """
 
@@ -114,8 +115,12 @@ def main():
     D['key1'] = grow()
     D['key2'] = grow()
     D['key3'] = grow()
-    
+    if argv[1:]:
+        Base = argv[1]
+    else:
+        Base = ""
     if D:
+        print "pathic - "+Base
         print ""
         print str(D['hatSize'])+" @ "+str(D['border'])
         print D['key1']

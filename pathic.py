@@ -6,8 +6,18 @@
   
     by: nullpass, 2012
 
+    Example:
+    
+$ ./pathic.py xxx
+pathic - xxx
+
+4 @ [1, 2]
+h57GfUVnEe3pRoVq
+8yw9Wqb4FsvchPz4
+8tkLCmLm8Ze52djQ
+
 """
-___version___="2.0.0"
+___version___="2.0.1"
 import random
 import time
 import datetime

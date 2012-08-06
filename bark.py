@@ -20,6 +20,7 @@ TODO:
         'import bark' or def bark locally as null-output function.
     
 """
+__version__='1.0.2'
 
 def bark(thisEvent):
     try:
@@ -51,7 +52,7 @@ def bark(thisEvent):
         import sys
         #
         # Try to get base name of current program minus the extension
-        m = search( '^([a-zA-Z0-9]+)\.*' , os.path.basename(sys.argv[0]) )
+        m = search( '^([a-zA-Z0-9\-_]+)\.*' , os.path.basename(sys.argv[0]) )
         if m:
             thisExec = m.group(1)
         else:

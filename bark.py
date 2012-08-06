@@ -7,14 +7,17 @@ bark.py - If debugg then log string. If unable to log, print.
 
 nullpass, 2012
 
+2012.08.05 - Initial release.
+
 ex:
 from bark import bark
 bark('hello world')
 
 TODO:
-    if UID = root then logDir = /var/log/
-    clean up imports
-    if os.path.basename(sys.argv[0]) is empty, make something up
+    - if UID is root: logDir = /var/log/
+    - clean up imports
+    - get rid of debugg, let calling program override (decide) to 
+        'import bark' or def bark locally as null-output function.
     
 """
 
@@ -36,8 +39,8 @@ def bark(thisEvent):
         from debugg import debugg
     except:
         #
-        # If unable to load variable 'debugg' assume False
-        debugg = False
+        # If unable to load variable 'debugg' assume True
+        debugg = True
     #
     #
     if debugg == True:
@@ -48,13 +51,14 @@ def bark(thisEvent):
         import sys
         #
         # Try to get base name of current program minus the extension
-        m = search( '^([a-zA-Z0-9]+)\.' , os.path.basename(sys.argv[0]) )
+        m = search( '^([a-zA-Z0-9]+)\.*' , os.path.basename(sys.argv[0]) )
         if m:
-            #line = line.strip("\n")
-            thisExec = m.group(0).strip(".")
+            thisExec = m.group(1)
         else:
             # Current program doesn't have an extension- so just use it.
             thisExec = os.path.basename(sys.argv[0])
+        if len(thisExec) < 3:
+            thisExec = 'python'
         #
         # Hostname
         thisHost = node()
@@ -68,13 +72,13 @@ def bark(thisEvent):
             # Try to log event
             thisLog = os.path.expanduser('~')+"/log/"+thisExec+".log"
             fileHandle = open(thisLog, 'a')
-            fileHandle.write(str(strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+thisProc+" "+str(thisEvent)+'\n')
+            fileHandle.write(str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+thisProc+" "+str(thisEvent)+'\n')
             fileHandle.close()
         except Exception as thisError:
             #
             # Else print error and event
             # Sun Aug 05 14:20:37 EDT 2012 myprogram[3125] [Errno 2] No such file or directory: '/home/me/log/myprogram.log'
             # Sun Aug 05 14:20:37 EDT 2012 myprogram[3125] hello world
-            print str(strftime("%a %b %d %H:%M:%S %Z %Y", localtime()))+" "+thisProc+" "+str(thisError)
-            print str(strftime("%a %b %d %H:%M:%S %Z %Y", localtime()))+" "+thisProc+" "+str(thisEvent)
-  return 0
+            print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+thisProc+" "+str(thisError)
+            print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+thisProc+" "+str(thisEvent)
+    return 0

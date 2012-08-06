@@ -17,7 +17,14 @@ TODO:
     - if UID is root: logDir = /var/log/
     - clean up imports
     - get rid of debugg, let calling program override (decide) to 
-        'import bark' or def bark locally as null-output function.
+        `import bark` or `def bark` locally as null-output function. An
+        example of that would be:
+        debugg=True
+        if debugg == True:
+            from bark import bark
+        else:
+            def bark(a):
+                return
     
 """
 __version__='1.0.2'

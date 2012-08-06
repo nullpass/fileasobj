@@ -7,7 +7,7 @@ bark.py - If debugg then log string. If unable to log, print.
 
 nullpass, 2012
 
-2012.08.05 - Initial release.
+2012.08.05 - Initial (public) release.
 
 ex:
 from bark import bark
@@ -65,6 +65,8 @@ def bark(thisEvent):
         else:
             # Current program doesn't have an extension- so just use it.
             thisExec = os.path.basename(sys.argv[0])
+        #
+        # If the name of the executable is too short or None make it py
         if len(thisExec) < 3:
             thisExec = 'python'
         #

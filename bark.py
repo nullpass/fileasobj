@@ -31,10 +31,13 @@ bark = Bark()
 bark.Enabled = False
 bark.do('Hello World.') # This won't be logged or printed.
 
-TODO:
-    - add main() back and allow strings from sys.argv
+# Or call from command line and use default settings
+$ python ./bark.py hello world
+$ cat ~/log/bark.log
+Sat Aug 11 18:33:45 EDT 2012 bark[4535] hello world 
+
 """
-__version__='3.0.2'
+__version__='4.0.0'
 import time
 import os
 from platform import node
@@ -85,3 +88,16 @@ class Bark:
                     print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(thisEvent)
             else:
                 print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(thisEvent)
+
+def main():
+    if not sys.argv[1:] and sys.stdin.isatty(): sys.exit(1)
+    bark = Bark()
+    barkMessage = ''
+    Arguments = sys.argv[1:]
+    for Argument in Arguments:
+        barkMessage += str(Argument)+' '
+    bark.do(barkMessage)
+    return 0
+
+if __name__ == '__main__':
+    main()

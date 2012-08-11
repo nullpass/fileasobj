@@ -1,94 +1,84 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 """
 
-bark.py - If debugg then log string. If unable to log, print.
+bark.py - Log given string, if unable to log, print.
 
 nullpass, 2012
 
+2012.08.11 - Convert bark function to class
+2012.08.08 - Removed 'debugg' check, leave bark calling up to caller
 2012.08.05 - Initial (public) release.
 
-ex:
-from bark import bark
-bark('hello world')
+Examples:
+
+# Log 'Hello World' to myapplication.log
+from bark import Bark
+bark = Bark()
+bark.logfile = '/var/log/myapplication.log'
+bark.Enabled = True
+bark.do('Hello World.')
+
+# Print 'Hello World' in log format
+from bark import Bark
+bark = Bark()
+bark.logfile = False
+bark.Enabled = True
+bark.do('Hello World.')
+
 
 TODO:
-    - if UID is root: logDir = /var/log/
-    - clean up imports
-    - get rid of debugg, let calling program override (decide) to 
-        `import bark` or `def bark` locally as null-output function. An
-        example of that would be:
-        debugg=True
-        if debugg == True:
-            from bark import bark
-        else:
-            def bark(a):
-                return
-    
+    - add main() back and allow strings from sys.argv
 """
-__version__='1.0.2'
+__version__='3.0.b'
+import time
+import os
+from platform import node
+from re import search
+import sys
 
-def bark(thisEvent):
-    try:
-        # 
-        # We can't call global variables from inside a module- and to 
-        # accept more than 1 argument would defeat the spirit of this
-        # module- so try to get the variable 'debugg' from module
-        # 'debugg.py' in current directory.
-        #
-        # The point of the 'debugg' variable is to be able to quickly
-        # enable/disable logging program-globally.
-        #
-        # ./debugg.py contains:
-        # debugg = True
-        # or
-        # debugg = False
-        from debugg import debugg
-    except:
-        #
-        # If unable to load variable 'debugg' assume True
-        debugg = True
-    #
-    #
-    if debugg == True:
-        import time
-        import os
-        from platform import node
-        from re import search
-        import sys
+class Bark:
+    """
+    """
+    def __init__(self):
+        self.Birthday = (float(time.time()),str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime())))
+        self.logfile = os.path.expanduser('~')+"/log/"+thisExec+".log"
+        self.Enabled = True
         #
         # Try to get base name of current program minus the extension
         m = search( '^([a-zA-Z0-9\-_]+)\.*' , os.path.basename(sys.argv[0]) )
         if m:
-            thisExec = m.group(1)
+            self.thisExec = m.group(1)
         else:
             # Current program doesn't have an extension- so just use it.
-            thisExec = os.path.basename(sys.argv[0])
+            self.thisExec = os.path.basename(sys.argv[0])
         #
         # If the name of the executable is too short or None make it py
         if len(thisExec) < 3:
-            thisExec = 'python'
+            self.thisExec = 'python'
         #
         # Hostname
-        thisHost = node()
+        self.thisHost = node()
         #
         # Current executable and PID
-        thisProc = thisExec+"["+str(os.getpid())+"]"
+        self.thisProc = self.thisExec+"["+str(os.getpid())+"]"
         #
-        # 
-        try:
-            #
-            # Try to log event
-            thisLog = os.path.expanduser('~')+"/log/"+thisExec+".log"
-            fileHandle = open(thisLog, 'a')
-            fileHandle.write(str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+thisProc+" "+str(thisEvent)+'\n')
-            fileHandle.close()
-        except Exception as thisError:
-            #
-            # Else print error and event
-            # Sun Aug 05 14:20:37 EDT 2012 myprogram[3125] [Errno 2] No such file or directory: '/home/me/log/myprogram.log'
-            # Sun Aug 05 14:20:37 EDT 2012 myprogram[3125] hello world
-            print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+thisProc+" "+str(thisError)
-            print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+thisProc+" "+str(thisEvent)
-    return 0
+    def do(self,thisEvent):
+        if self.Enabled == True:
+            if self.logfile:
+                try:
+                    #
+                    # Try to log event to log file that already exists.
+                    self.fileHandle = open(self.logfile, 'a')
+                    self.fileHandle.write(str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(self.thisEvent)+'\n')
+                    self.fileHandle.close()
+                except Exception as self.thisError:
+                    #
+                    # Else print error and event
+                    # Sun Aug 05 14:20:37 EDT 2012 myprogram[3125] [Errno 2] No such file or directory: '/home/me/log/myprogram.log'
+                    # Sun Aug 05 14:20:37 EDT 2012 myprogram[3125] hello world
+                    print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(self.thisError)
+                    print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(self.thisEvent)
+            else:
+                print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(self.thisEvent)

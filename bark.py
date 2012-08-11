@@ -37,7 +37,7 @@ $ cat ~/log/bark.log
 Sat Aug 11 18:33:45 EDT 2012 bark[4535] hello world 
 
 """
-__version__='4.0.0'
+__version__='4.0.1'
 import time
 import os
 from platform import node
@@ -75,7 +75,7 @@ class Bark:
             if self.logfile:
                 try:
                     #
-                    # Try to log event to log file that already exists.
+                    # Try to log event to log file, create if doesnt exist.
                     self.fileHandle = open(self.logfile, 'a')
                     self.fileHandle.write(str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(thisEvent)+'\n')
                     self.fileHandle.close()

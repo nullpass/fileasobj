@@ -17,21 +17,24 @@ Examples:
 from bark import Bark
 bark = Bark()
 bark.logfile = '/var/log/myapplication.log'
-bark.Enabled = True
 bark.do('Hello World.')
 
 # Print 'Hello World' in log format
 from bark import Bark
 bark = Bark()
 bark.logfile = False
-bark.Enabled = True
 bark.do('Hello World.')
 
+# Disable output
+from bark import Bark
+bark = Bark()
+bark.Enabled = False
+bark.do('Hello World.') # This won't be logged or printed.
 
 TODO:
     - add main() back and allow strings from sys.argv
 """
-__version__='3.0.1'
+__version__='3.0.2'
 import time
 import os
 from platform import node

@@ -3,7 +3,7 @@
 #
 """
 
-bark.py - Log given string, if unable to log, print.
+bark.py - Log or print given string, if unable to log, print.
 
 nullpass, 2012
 
@@ -37,7 +37,7 @@ $ cat ~/log/bark.log
 Sat Aug 11 18:33:45 EDT 2012 bark[4535] hello world 
 
 """
-__version__='4.0.1'
+__version__='4.0.2'
 import time
 import os
 from platform import node
@@ -46,8 +46,26 @@ import sys
 
 class Bark:
     """
+    The Mighty Bark Class.
+    
+    Bark is a devel-logging tool to make it easier to log and/or print
+    messages (usually debug messages) and allows the devel to quickly
+    enable/disable those debug messages globally. 
+    
+    This program was born as a simple function which printed a given
+    string to STDOUT and included a locale timestamp. The function kept
+    getting copied and re-used in most of my programs so I converted it
+    to a module, and eventually a class. Making it a class enabled easy
+    setting management for Enable and Bark.logfile. 
+    
     """
     def __init__(self):
+        """
+        Define default settings which are:
+        Bark is Enabled
+        Log file is saved in ~log/ using name of calling Python script.
+        Default is to log to log file, not print.
+        """
         self.Birthday = (float(time.time()),str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime())))
         self.Enabled = True
         #
@@ -71,6 +89,9 @@ class Bark:
         #
         self.logfile = os.path.expanduser('~')+"/log/"+self.thisExec+".log"
     def do(self,thisEvent):
+        """
+        bark.do('Hello World!')
+        """
         if self.Enabled == True:
             if self.logfile:
                 try:
@@ -90,6 +111,11 @@ class Bark:
                 print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(thisEvent)
 
 def main():
+    """
+    Accept bark messages via command line.
+    Anti-TODO: Don't expand this to accept options via arguments. If you
+    need that much complexity use your system's `logger`.
+    """
     if not sys.argv[1:] and sys.stdin.isatty(): sys.exit(1)
     bark = Bark()
     barkMessage = ''

@@ -35,7 +35,7 @@ else:
 
 """
   
-__version__ = '0.0.a'
+__version__ = '0.0.b'
 import time
 import os
 from platform import node
@@ -88,14 +88,15 @@ class Locker:
         self.lockfile = '/var/run/'+self.thisExec+'.pid'
         #
         # Alias remove to delete, for easier use.
+        # mylock.remove() and mylock.delete() do the same thing
         self.remove = self.delete
     def __log(self,thisEvent):
         self.Trace += str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisProc+' '+str(thisEvent)+'\n'
         return
     def create(self):
         """
-        if self.check() == True
-            then create lock file.
+        check() for existing lock file, if that returns True create a 
+        new lock file and return True.
         """
         self.__log('create(self)')
         if self.check():
@@ -109,11 +110,11 @@ class Locker:
         return False
     def delete(self):
         """
-        Remove the lock file.
+        Remove the lock file. 
+        This can also be accessed as mylock.remove()
         """
         self.__log('delete(self)')
         try:
-            
             os.remove(self.lockfile)
             return True
         except Exception as e:

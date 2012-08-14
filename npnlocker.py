@@ -20,7 +20,7 @@ Logic:
         [A previous instance is stuck, kill it and allow a new instance to run]
         
     If PID running but the name of the process does not match str(thisExec): OK, delete, create
-        [Previous instance failed to remove its lock file and some other process spawned later with the same PID]
+        [Previous instance failed to remove its lock file and some other process spawned later with the same PID]*
         
     If lock file exists, PID running and the process matches str(thisExec): FAIL
         [Previous instance still running, not old enough to kill]
@@ -68,6 +68,10 @@ process would get `kill`ed.
 The self.Killable variable gives you the chance to be careful with 
 process management without sacrificing lock file functionality.
 
+*You may think it is rather silly to worry about PID re-use, but I have 
+to code on/for systems that stay online for years at a time, some have 
+been up for over a decade, but whether or not it makes sense it is still
+a valid error condition and one that is easy to check for. 
 ______________________
 TODO:
     1. os.kill in Locker.murder() needs more testing
@@ -289,9 +293,9 @@ class Locker:
             self.Errors.append(e)
         return False
 def main():
-	"""
     """
-	return 0
+    """
+    return 0
 
 if __name__ == '__main__':
-	main()
+    main()

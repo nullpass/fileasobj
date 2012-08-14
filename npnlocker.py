@@ -4,7 +4,9 @@
 """
 npnlocker.py - Provide easy lock file management as a class
 
-nullpass, 2012
+"Dissatisfied with the shape of a perfect circle I've reinvented the wheel, again."
+
+by: nullpass, 2012
 
 2012.08.xx - Initial release
 
@@ -75,18 +77,19 @@ class Locker:
         self.Errors = []
         #
         # String containing information about steps taken. Used for debugging
-        #>>> print m.Trace
-        #check
-        #pid file found
-        #get old pid
-        #pid running
-        #get command of old pid
-        #delete
-        #create
+        """
+        >>> print m.Trace
+        Tue Aug 14 15:29:53 EDT 2012 python_3253[3253] check(self)
+        Tue Aug 14 15:29:53 EDT 2012 python_3253[3253] PID file /home/me/m.pid found
+        Tue Aug 14 15:29:53 EDT 2012 python_3253[3253] Get old PID from /home/me/m.pid
+        Tue Aug 14 15:29:53 EDT 2012 python_3253[3253] PID 3212 in /home/me/m.pid not running
+        Tue Aug 14 15:29:53 EDT 2012 python_3253[3253] delete(self)
+        Tue Aug 14 15:30:02 EDT 2012 python_3253[3253] create(self)
+        """
         self.Trace = ''
         #
         # Max age (in seconds) a lock file can be before it's considered invalid
-        self.maxage = int(300) 
+        self.maxage = int(1) 
         #
         # Name of file this is running as
         self.thisExec = str(os.path.basename(sys.argv[0]))
@@ -110,6 +113,10 @@ class Locker:
         # mylock.remove() and mylock.delete() do the same thing
         self.remove = self.delete
     def __log(self,thisEvent):
+        """
+        Private method to update self.Trace with str(thisEvent) given
+        as argument.
+        """
         self.Trace += str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisProc+' '+str(thisEvent)+'\n'
         return
     def create(self):
@@ -222,7 +229,7 @@ class Locker:
         try:
             #
             # TODO: need to do field testing of os.kill.
-            os.kill(self.oldpid, 9)
+            os.kill(int(self.oldpid), 9)
             return True
         except Exception as e:
             self.Errors.append(e)

@@ -70,7 +70,7 @@ process management without sacrificing lock file functionality.
 
 ______________________
 TODO:
-    1. os.kill in Locker.murder() needs more testing and Windows support
+    1. os.kill in Locker.murder() needs more testing
     2. Add basic funtionality to main() to allow locking with default 
         settings from the command line. Use sys.exit(0|1) to inform
         caller if locker was successful.
@@ -85,6 +85,7 @@ import signal
 
 class Locker:
     """
+    Yu' sure gotta purddy lockfile.
     """
     def __init__(self):
         """

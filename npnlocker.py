@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 """
@@ -51,6 +51,20 @@ else:
     print 'unable to create lock file'
     print 'Errors: \n'+str(mylock.Errors)
 
+Notes:
+
+Be mindful of 'thisExec' even if you don't override it with a custom 
+name.
+The contents of /proc/'oldpid'/cmdline could be anything, and since the
+logic only does a very simple substring check you might end up `kill`ing
+a legitimate process that has a similar file name or argument. 
+For example, if you named your 'thisExec' bob and there was another 
+process that started later and happened to re-use the PID for a previous 
+instance of `bob` and was named 'john.sh --path=/var/bob' then that 
+process would get `kill`ed. 
+The self.Killable variable gives you the chance to be careful with 
+process management without sacrificing lock file functionality.
+
 """
   
 __version__ = '0.0.b'
@@ -58,6 +72,7 @@ import time
 import os
 from platform import node
 import sys
+import signal
 
 class Locker:
     """
@@ -163,8 +178,12 @@ class Locker:
                 self.oldpid = fileHandle.read().rstrip()
                 fileHandle.close()
                 if os.path.exists( '/proc/'+str(self.oldpid) ):
+                    #
+                    # PID is running, get name from /prod/oldpid/cmdline 
                     self.__log('PID '+str(self.oldpid)+' is running, check name in /proc/%s/cmdline')
                     if os.path.exists( '/proc/'+str(self.oldpid)+'/cmdline' ):
+                        #
+                        # Get string from 
                         self.__log('Get the command and arguments in cmdline as a string')
                         fileHandle = open('/proc/'+str(self.oldpid)+'/cmdline', 'r')
                         currentProc = fileHandle.read()
@@ -188,11 +207,11 @@ class Locker:
                                 if self.murder():
                                     return True
                                 return False
-                            if timeDiff < self.maxage:
+                            else:
                                 #
-                                # Lock file created recently, PID still
-                                # running and the process looks like 
-                                # this application, refuse new lock.
+                                # Lock file was created recently, PID 
+                                # still running and the process looks 
+                                # like this application, refuse new lock
                                 self.__log('lock file recently modofied, timeDiff='+str(timeDiff))
                                 return False
                         else:
@@ -203,6 +222,7 @@ class Locker:
                             if self.delete():
                                 return True
                             return False
+                    #else: #There is no /proc/oldpid/cmdline
                 else:
                     #
                     #File exists, but pid not running, remove lock file.
@@ -221,19 +241,20 @@ class Locker:
         """
         Try to kill pid found in the lock file.
         """
-        self.__log('murder(self), Killable is'+str(self.Killable))
+        self.__log('murder(self), Killable is: '+str(self.Killable))
         if not self.Killable:
             #
             # Not allowed to `kill` so just return True.
             return True
         try:
             #
-            # TODO: need to do field testing of os.kill.
+            # send `kill -9 ${PID}`
+            # TODO: Needs Windows testing, signal.SIG_DFL doesn't work 
+            # on Linux the way I expect.
             os.kill(int(self.oldpid), 9)
             return True
         except Exception as e:
             self.Errors.append(e)
-            return False
         return False
 def main():
 	"""

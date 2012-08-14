@@ -9,7 +9,7 @@ npnlocker.py - Provide easy lock file management as a class
 by: nullpass, 2012
 
 2012.08.xx - Initial release
-
+______________________
 Logic:
     If lock file does not exist: OK, create
 
@@ -24,11 +24,11 @@ Logic:
         
     If lock file exists, PID running and the process matches str(thisExec): FAIL
         [Previous instance still running, not old enough to kill]
-
+______________________
 Examples:
 
 # Try to create a lock file using default settings (see __init__)
-
+#
 from npnlocker import Locker
 mylock = Locker()
 if mylock.create():
@@ -37,10 +37,11 @@ if mylock.create():
     ...
     mylock.delete()
 
-# Try to create a lock file using a custom pid file, don't allow a 
-# previous instance to be killed, let it run as an orphan.
-# Set maximum age of the lock file to be 999999999 seconds.
 
+# Try to create a lock file using a custom pid file. 
+# Don't allow a previous instance to be killed.
+# Set maximum age of the lock file to be 999999999 seconds.
+#
 from npnlocker import Locker
 mylock = Locker()
 mylock.lockfile = '/var/run/custom.pid'
@@ -52,7 +53,7 @@ if mylock.create():
 else:
     print 'unable to create lock file'
     print 'Errors: \n'+str(mylock.Errors)
-
+______________________
 Notes:
 
 Be mindful of 'thisExec' even if you don't override it with a custom 

@@ -68,6 +68,12 @@ process would get `kill`ed.
 The self.Killable variable gives you the chance to be careful with 
 process management without sacrificing lock file functionality.
 
+______________________
+TODO:
+    1. os.kill in Locker.murder() needs more testing and Windows support
+    2. Add basic funtionality to main() to allow locking with default 
+        settings from the command line. Use sys.exit(0|1) to inform
+        caller if locker was successful.
 """
   
 __version__ = '0.0.b'
@@ -85,10 +91,13 @@ class Locker:
         Give birth, define default settings.
         """
         self.Birthday = (float(time.time()),str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime())))
+        #
+        # Setting this to False will cause all methods to return True 
+        # without actually doing anything.
         self.Enabled = True
         #
-        # True = Let Locker() os.kill an old pid found where the name of the process matches this application.
-        # If False murder() will return True but not actually os.kill
+        # True = Let Locker.murder() os.kill an old pid found where the name of the process matches this application.
+        # If False, Locker.murder() will return True but not actually os.kill
         self.Killable = True 
         #
         # List of any exceptions caught
@@ -143,6 +152,8 @@ class Locker:
         Private method to update self.Trace with str(thisEvent) given
         as argument.
         """
+        if not self.Enabled:
+            return True
         self.Trace += str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisProc+' '+str(thisEvent)+'\n'
         return
     def create(self):
@@ -150,6 +161,8 @@ class Locker:
         check() for existing lock file, if that returns True create a 
         new lock file and return True.
         """
+        if not self.Enabled:
+            return True
         self.__log('create(self)')
         if self.check():
             try:
@@ -168,6 +181,8 @@ class Locker:
         Remove the lock file. 
         This can also be accessed as mylock.remove()
         """
+        if not self.Enabled:
+            return True
         self.__log('delete(self)')
         try:
             os.remove(self.lockfile)
@@ -179,6 +194,8 @@ class Locker:
         """
         Check for lock file, running proc, and name of running proc.
         """
+        if not self.Enabled:
+            return True
         self.__log('check(self)')
         if os.path.exists(self.lockfile):
             #
@@ -255,7 +272,9 @@ class Locker:
         """
         Try to kill pid found in the lock file.
         """
-        self.__log('murder(self), Killable is: '+str(self.Killable))
+         if not self.Enabled:
+            return True
+       self.__log('murder(self), Killable is: '+str(self.Killable))
         if not self.Killable:
             #
             # Not allowed to `kill` so just return True.
@@ -263,8 +282,6 @@ class Locker:
         try:
             #
             # send `kill -9 ${PID}`
-            # TODO: Needs Windows testing, signal.SIG_DFL doesn't work 
-            # on Linux the way I expect.
             os.kill(int(self.oldpid), 9)
             return True
         except Exception as e:
@@ -272,7 +289,6 @@ class Locker:
         return False
 def main():
 	"""
-    TODO: accept lock file from command line, just for shits and giggles.
     """
 	return 0
 

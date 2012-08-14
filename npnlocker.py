@@ -103,8 +103,13 @@ class Locker:
         """
         self.Trace = ''
         #
-        # Max age (in seconds) a lock file can be before it's considered invalid
-        self.maxage = int(1) 
+        # Max age (in seconds) a lock file can be before it is 
+        # considered invalid (too old to trust)
+        self.maxage = int(1)     # 1 second
+        self.maxage = int(300)   # 5 minutes
+        self.maxage = int(3600)  # 1 hour
+        self.maxage = int(43200) # 12 hours
+        self.maxage = int(86400) # 24 hours
         #
         # Name of file this is running as
         self.thisExec = str(os.path.basename(sys.argv[0]))
@@ -127,6 +132,9 @@ class Locker:
         # Alias remove to delete, for easier use.
         # mylock.remove() and mylock.delete() do the same thing
         self.remove = self.delete
+        #
+        # If you need to double check lock status after calling Locker.create()
+        self.Locked = False
     def __log(self,thisEvent):
         """
         Private method to update self.Trace with str(thisEvent) given
@@ -145,6 +153,9 @@ class Locker:
                 fileHandle = open(self.lockfile, 'w')
                 fileHandle.write(str(os.getpid()) + '\n')
                 fileHandle.close()
+                #
+                # If we got this far everything worked, set Locked True
+                self.Locked = True
                 return True
             except Exception as e:
                 self.Errors.append(e)

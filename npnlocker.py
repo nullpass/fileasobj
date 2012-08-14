@@ -16,8 +16,8 @@ Logic:
     If lock file exists but proc not running: OK, delete, create
         [Previous instance failed to remove its lock file before exiting]
 
-    If PID running and process matches str(thisExec) and the lock file is older than int(maxage): OK, kill PID, delete, create
-        [A previous instance is stuck, kill it and start allow a new instance to run]
+    If PID running and process matches str(thisExec) and the lock file is older than int(maxage): OK, kill, delete, create
+        [A previous instance is stuck, kill it and allow a new instance to run]
         
     If PID running but the name of the process does not match str(thisExec): OK, delete, create
         [Previous instance failed to remove its lock file and some other process spawned later with the same PID]

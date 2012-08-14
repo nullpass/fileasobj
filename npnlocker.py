@@ -9,13 +9,29 @@ nullpass, 2012
 2012.08.xx - Initial release
 
 Logic:
-    If lock file exists but proc not running: OK, overwrite
     If lock file does not exist: OK, create
-    If lock file exists but is older than X: OK, kill pid and overwrite
-    If lock file exists and proc running: FAIL
-    
 
-Example:
+    If lock file exists but proc not running: OK, delete, create
+        [Previous instance failed to remove its lock file before exiting]
+
+    If PID running and process matches str(thisExec) and the lock file is older than int(maxage): OK, kill PID, delete, create
+        [A previous instance is stuck, kill it and start allow a new instance to run]
+        
+    If PID running but the name of the process does not match str(thisExec): OK, delete, create
+        [Previous instance failed to remove its lock file and some other process spawned later with the same PID]
+        
+    If lock file exists, PID running and the process matches str(thisExec): FAIL
+        [Previous instance still running, not old enough to kill]
+
+Examples:
+
+# Try to create a lock file using default settings (see __init__)
+
+from npnlocker import Locker
+mylock = Locker()
+if mylock.create():
+    my_function()
+
 
 # Try to create a lock file using a custom pid file, don't allow a 
 # previous instance to be killed, let it run as an orphan.
@@ -39,7 +55,6 @@ __version__ = '0.0.b'
 import time
 import os
 from platform import node
-from re import search
 import sys
 
 class Locker:
@@ -47,10 +62,14 @@ class Locker:
     """
     def __init__(self):
         """
+        Give birth, define default settings.
         """
         self.Birthday = (float(time.time()),str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime())))
         self.Enabled = True
-        self.Killable = True # Allow/Deny Locker() from killing old (stuck) processes matching this application.
+        #
+        # True = Let Locker() os.kill an old pid found where the name of the process matches this application.
+        # If False murder() will return True but not actually os.kill
+        self.Killable = True 
         #
         # List of any exceptions caught
         self.Errors = []
@@ -188,7 +207,8 @@ class Locker:
                 self.Errors.append(e)
                 return False
         #
-        # No lock file, return OK
+        # No lock file, check() returns True, OK to create.
+        self.__log('No lock file found')
         return True
     def murder(self):
         """

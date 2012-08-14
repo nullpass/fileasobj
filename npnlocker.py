@@ -16,9 +16,11 @@ Logic:
     
 
 Example:
+
 # Try to create a lock file using a custom pid file, don't allow a 
-# previous instance to be killed, let be run as an untracked orphan.
+# previous instance to be killed, let it run as an orphan.
 # Set maximum age of the lock file to be 999999999 seconds.
+
 from npnlocker import Locker
 mylock = Locker()
 mylock.lockfile = '/var/run/custom.pid'
@@ -26,9 +28,10 @@ mylock.maxage = int(999999999)
 mylock.Killable = False
 if mylock.create():
     print 'I made a lock file'
+    print 'Debugg output: \n'+str(mylock.Trace)
 else:
     print 'unable to create lock file'
-    print 'Errors: '+str(mylock.Errors)
+    print 'Errors: \n'+str(mylock.Errors)
 
 """
   
@@ -202,8 +205,8 @@ class Locker:
             return False
         return False
 def main():
-  """
-    TODO: accept lock file from command line, just for shits and giggle.
+	"""
+    TODO: accept lock file from command line, just for shits and giggles.
     """
 	return 0
 

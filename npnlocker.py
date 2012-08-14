@@ -86,6 +86,9 @@ class Locker:
         #
         # Full path to lock file, default to var/run/thisExec.pid
         self.lockfile = '/var/run/'+self.thisExec+'.pid'
+        #
+        # Alias remove to delete, for easier use.
+        self.remove = self.delete
     def __log(self,thisEvent):
         self.Trace += str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisProc+' '+str(thisEvent)+'\n'
         return

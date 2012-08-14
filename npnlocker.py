@@ -32,8 +32,10 @@ Examples:
 from npnlocker import Locker
 mylock = Locker()
 if mylock.create():
-    my_function()
-
+    ...
+    ...code that requires a lock file here...
+    ...
+    mylock.delete()
 
 # Try to create a lock file using a custom pid file, don't allow a 
 # previous instance to be killed, let it run as an orphan.

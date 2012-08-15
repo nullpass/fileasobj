@@ -64,7 +64,7 @@ class FileAsObj:
         self.thisHost = node()
         #
         # Current executable and PID, like myapp[12345]
-        self.thisProc = self.thisExec.rstrip('.py')+"["+str(os.getpid())+"]"
+        self.thisProc = self.thisExec.rstrip('.py')+'['+str(os.getpid())+']'
         #
         # List of any exceptions caught
         self.Errors = []
@@ -86,6 +86,13 @@ class FileAsObj:
         return
     def read(self,thisFile):
         """
+        
+        Open thisFile and write its contents to self.contents.
+        Will not add duplicate lines or lines that start with #
+        
+        WILL add a line if it starts with a space or tab but has a #
+        later in the line.
+        
         FileAsObj.read('./inputfile.txt')
         """
         self.filename = str.strip(thisFile)
@@ -116,16 +123,16 @@ class FileAsObj:
         if needle in self.contents:
             return True
         return False
-    def add(self,item):
+    def add(self,thisItem):
         """
-        add item to end of list unless it already exists.
+        add thisItem to end of list unless it already exists.
         """
         #
         #Check for the item.
         if item not in self.contents:
             #
             # not present, adding.
-            self.contents.append(item)
+            self.contents.append(thisItem)
             #
             #declare something in this object has changed since __init__
             self.virgin = False
@@ -161,12 +168,12 @@ class FileAsObj:
     def write(self):
         """
         write self.contents to self.filename
-        self.filename was defined during __init__
+        self.filename was defined during .read()
         
         There is no self.virgin check because we need to let the caller
         decide whether or not to write. This is useful if you want to 
         force an overwrite of a file that might have been changed on 
-        disk while the caller was updating self.contents
+        disk even if self.contents did not change.
         
         You can do something like:
         if not stats.virgin:

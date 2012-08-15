@@ -301,10 +301,14 @@ def main():
     me@pybox01:~$ python ./npnlocker.py delete ./foo.pid ; echo $?
     0
     me@pybox01:~$ 
+    
+    in shell code
+    python ./npnlocker.py create ./foo.pid || exit $?
+    
     """
     if not sys.argv[1:] and sys.stdin.isatty(): sys.exit(1)
     mylock = Locker()
-    if sys.argv[2]:
+    if sys.argv[2:]:
         mylock.lockfile = sys.argv[2]
     #
     if 'create' in sys.argv[1]:

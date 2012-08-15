@@ -58,30 +58,28 @@ class FileAsObj:
         #
         self.contents = []
         #
+        #set filename inside object
+        self.filename = str.strip(thisFile)
         #
+        #declare current state is original data from thisFile.
+        self.virgin = True
         try:
-            self.__log('Read-only opening '+file)
-            for line in fileinput.input(file):
+            self.__log('Read-only opening '+str(self.filename))
+            for line in fileinput.input(self.filename):
                 if line[0] is not "#":
                     #
-                    #uniq the contents of the file when reading.
+                    #uniq the contents of the thisFile when reading.
                     line = line.strip("\n")
                     if len(line) > 1 and line not in self.contents:
                         self.contents.append(line)
             fileinput.close()
+            self.__log('Wrote '+str( len(self.contents) )+' lines')
         except Exception as e:
             self.Errors.append(e)
             return False
-        #
-        #declare current state is original data from file.
-        self.virgin = True
-        #
-        #set filename inside object, used during .write()
-        self.filename = file
     def __log(self,thisEvent):
         """
-        Private method to update self.Trace with str(thisEvent) given
-        as argument.
+        Private method to update self.Trace with str(thisEvent)
         """
         if not self.Enabled:
             return True
@@ -115,17 +113,17 @@ class FileAsObj:
         #
         # Already present, no changes made.
         return False
-    def rm(self,item):
+    def rm(self,thisItem):
         """
-        remove item from contents.
+        remove thisItem from contents.
         """
+        self.__log('Call to remove "'+str(thisItem)+'" from '+str(self.filename))
         #
         #Check for item
-        self.__log("Call to remove '"+item+"' from "+self.filename)
-        if item in self.contents:
+        if thisItem in self.contents:
             #
-            #item found, removed.
-            self.contents.remove(item)
+            #thisItem found, removed.
+            self.contents.remove(thisItem)
             #
             #declare something in this object has changed since __init__
             self.virgin = False
@@ -145,9 +143,14 @@ class FileAsObj:
         write self.contents to self.filename
         self.filename was defined during __init__
         """
-        self.__log("Writing "+self.filename)
-        f = open(self.filename, "w")
-        for line in self.contents:
-            f.write(line+"\n")
-        f.close()
-        return True
+        try:
+            self.__log('Writing '+str(self.filename))
+            fileHandle = open(self.filename, 'w')
+            for thisLine in self.contents:
+                fileHandle.write(thisLine+'\n')
+            fileHandle.close()
+            return True
+        except Excetion as e:
+            self.Errors.append(e)
+            return False
+

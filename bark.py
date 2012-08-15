@@ -37,7 +37,7 @@ $ cat ~/log/bark.log
 Sat Aug 11 18:33:45 EDT 2012 bark[4535] hello world 
 
 """
-__version__='4.0.2'
+__version__='4.1.0'
 import time
 import os
 from platform import node
@@ -85,9 +85,9 @@ class Bark:
         self.thisHost = node()
         #
         # Current executable and PID
-        self.thisProc = self.thisExec+"["+str(os.getpid())+"]"
+        self.thisProc = self.thisExec+'['+str(os.getpid())+']'
         #
-        self.logfile = os.path.expanduser('~')+"/log/"+self.thisExec+".log"
+        self.logfile = os.path.expanduser('~')+'/log/'+self.thisExec+'.log'
     def do(self,thisEvent):
         """
         bark.do('Hello World!')
@@ -98,17 +98,17 @@ class Bark:
                     #
                     # Try to log event to log file, create if doesnt exist.
                     self.fileHandle = open(self.logfile, 'a')
-                    self.fileHandle.write(str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(thisEvent)+'\n')
+                    self.fileHandle.write(str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisHost+' '+self.thisProc+' '+str(thisEvent)+'\n')
                     self.fileHandle.close()
                 except Exception as self.thisError:
                     #
                     # Else print error and event
                     # Sun Aug 05 14:20:37 EDT 2012 myprogram[3125] [Errno 2] No such file or directory: '/home/me/log/myprogram.log'
                     # Sun Aug 05 14:20:37 EDT 2012 myprogram[3125] hello world
-                    print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(self.thisError)
-                    print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(thisEvent)
+                    print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisHost+' '+self.thisProc+' '+str(self.thisError)
+                    print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisHost+' '+self.thisProc+' '+str(thisEvent)
             else:
-                print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+" "+self.thisProc+" "+str(thisEvent)
+                print str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisHost+' '+self.thisProc+' '+str(thisEvent)
 
 def main():
     """

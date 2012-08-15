@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 """
-FileAsObj.py - Manage a local file as an object. Store contents in a 
+fileasobj.py - Manage a local file as an object. Store contents in a 
                 uniq list and ignore commented lines.
 
 nullpass, 2012
@@ -151,11 +151,3 @@ class FileAsObj:
             f.write(line+"\n")
         f.close()
         return True
-
-def main():
-    
-	return 0
-
-if __name__ == '__main__':
-	main()
-

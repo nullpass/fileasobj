@@ -6,7 +6,7 @@ npnlocker.py - Provide easy lock file management as a class
 
 "Dissatisfied with the shape of a perfect circle I've reinvented the wheel, again."
 
-by: nullpass, 2012
+by: nullpass, 2012; based loosely on gekitsuu's Mutex()
 
 2012.08.xx - Initial release
 ______________________

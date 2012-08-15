@@ -13,7 +13,7 @@ __version__ = '1.b.0'
 import sys
 import os
 import fileinput
-import platform
+from platform import node
 import time
 
 class FileAsObj:
@@ -27,7 +27,7 @@ class FileAsObj:
     the file, with .write. 
     
     """
-    def __init__(self,thisFile):
+    def __init__(self):
         """
         read file into list varaible, uniq and without line breaks
         Ignore lines that start with #
@@ -57,12 +57,21 @@ class FileAsObj:
         #
         #
         self.contents = []
-        #
-        #set filename inside object
-        self.filename = str.strip(thisFile)
+        self.filename = None
         #
         #declare current state is original data from thisFile.
         self.virgin = True
+    def __log(self,thisEvent):
+        """
+        Private method to update self.Trace with str(thisEvent)
+        """
+        self.Trace += str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisHost+' '+self.thisProc+' '+str(thisEvent)+'\n'
+        return
+    def read(self,thisFile):
+        """
+        FileAsObj.read('./inputfile.txt')
+        """
+        self.filename = str.strip(thisFile)
         try:
             self.__log('Read-only opening '+str(self.filename))
             for line in fileinput.input(self.filename):
@@ -74,18 +83,11 @@ class FileAsObj:
                         self.contents.append(line)
             fileinput.close()
             self.__log('Wrote '+str( len(self.contents) )+' lines')
+            return True
         except Exception as e:
-            self.__log('ERROR during __init__(self,thisFile)')
+            self.__log('ERROR during read(self,thisFile)')
             self.Errors.append(e)
             return False
-    def __log(self,thisEvent):
-        """
-        Private method to update self.Trace with str(thisEvent)
-        """
-        if not self.Enabled:
-            return True
-        self.Trace += str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisHost+' '+self.thisProc+' '+str(thisEvent)+'\n'
-        return
     def check(self,needle):
         """
         check existing contents of file for a string

@@ -7,6 +7,23 @@ fileasobj.py - Manage a local file as an object. Store contents in a
 
 nullpass, 2012
 
+2012.08.xx - Initial release
+
+______________________
+Example:
+
+from fileasobj import FileAsObj
+input_txt = FileAsObj()
+
+if input_txt.read('./input.txt'):
+    print input_txt.contents
+    input_txt.add('foo')
+    input_txt.add('bar')
+    input_txt.write()
+else:
+    print input_txt.Trace
+    print input_txt.Errors
+
 """
 __version__ = '1.b.0'
 
@@ -77,9 +94,9 @@ class FileAsObj:
             for line in fileinput.input(self.filename):
                 if line[0] is not "#":
                     #
-                    #uniq the contents of the thisFile when reading.
+                    #uniq the contents of the thisFile when read()ing.
                     line = line.strip("\n")
-                    if len(line) > 1 and line not in self.contents:
+                    if len(line) > 0 and line not in self.contents:
                         self.contents.append(line)
             fileinput.close()
             self.__log('Wrote '+str( len(self.contents) )+' lines')

@@ -12,6 +12,16 @@ nullpass, 2012
 ______________________
 Example:
 
+$ cat ./input.txt
+valid entry
+#ignore this entry
+# another comment
+  # will read()/write() this entry
+site.ltd
+foo.bar
+.lol
+#
+
 from fileasobj import FileAsObj
 input_txt = FileAsObj()
 

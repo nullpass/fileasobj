@@ -159,7 +159,7 @@ class Locker:
         """
         if not self.Enabled:
             return True
-        self.Trace += str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisProc+' '+str(thisEvent)+'\n'
+        self.Trace += str(time.strftime("%a %b %d %H:%M:%S %Z %Y", time.localtime()))+' '+self.thisHost+' '+self.thisProc+' '+str(thisEvent)+'\n'
         return
     def create(self):
         """
@@ -277,9 +277,9 @@ class Locker:
         """
         Try to kill pid found in the lock file.
         """
-         if not self.Enabled:
+        if not self.Enabled:
             return True
-       self.__log('murder(self), Killable is: '+str(self.Killable))
+        self.__log('murder(self), Killable is: '+str(self.Killable))
         if not self.Killable:
             #
             # Not allowed to `kill` so just return True.

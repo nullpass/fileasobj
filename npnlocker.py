@@ -77,7 +77,7 @@ TODO:
     1. os.kill in Locker.murder() needs more testing
     2. Add basic funtionality to main() to allow locking with default 
         settings from the command line. Use sys.exit(0|1) to inform
-        caller if locker was successful.
+        caller if locker was successful. --DONE, check main() for usage
 """
   
 __version__ = '0.0.b'
@@ -294,8 +294,39 @@ class Locker:
         return False
 def main():
     """
+    If you want to use this for shell scripts or unix apps do this:
+    
+    me@pybox01:~$ python ./npnlocker.py create ./foo.pid ; echo $?
+    0
+    me@pybox01:~$ python ./npnlocker.py delete ./foo.pid ; echo $?
+    0
+    me@pybox01:~$ 
     """
-    return 0
+    if not sys.argv[1:] and sys.stdin.isatty(): sys.exit(1)
+    mylock = Locker()
+    if sys.argv[2]:
+        mylock.lockfile = sys.argv[2]
+    #
+    if 'create' in sys.argv[1]:
+        if mylock.create():
+            sys.exit(0)
+        sys.exit(1)
+    #
+    if 'check' in sys.argv[1]:
+        if mylock.check():
+            #
+            # Check returns ZERO because it is OK to create a new lock
+            # This command will DELETE the lock file if it is no longer
+            # a valid lock file for this application
+            sys.exit(0)
+        sys.exit(1)
+    #
+    if 'delete' in sys.argv[1]:
+        if mylock.delete():
+            sys.exit(0)
+        sys.exit(1)
+                    
+    sys.exit(1)
 
 if __name__ == '__main__':
     main()

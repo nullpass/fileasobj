@@ -316,15 +316,6 @@ def main():
             sys.exit(0)
         sys.exit(1)
     #
-    if 'check' in sys.argv[1]:
-        if mylock.check():
-            #
-            # Check returns ZERO because it is OK to create a new lock
-            # This command will DELETE the lock file if it is no longer
-            # a valid lock file for this application
-            sys.exit(0)
-        sys.exit(1)
-    #
     if 'delete' in sys.argv[1]:
         if mylock.delete():
             sys.exit(0)

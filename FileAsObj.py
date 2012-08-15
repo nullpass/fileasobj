@@ -27,7 +27,7 @@ class FileAsObj:
     the file, with .write. 
     
     """
-    def __init__(self,file):
+    def __init__(self,thisFile):
         """
         read file into list varaible, uniq and without line breaks
         Ignore lines that start with #
@@ -75,6 +75,7 @@ class FileAsObj:
             fileinput.close()
             self.__log('Wrote '+str( len(self.contents) )+' lines')
         except Exception as e:
+            self.__log('ERROR during __init__(self,thisFile)')
             self.Errors.append(e)
             return False
     def __log(self,thisEvent):
@@ -142,6 +143,18 @@ class FileAsObj:
         """
         write self.contents to self.filename
         self.filename was defined during __init__
+        
+        There is no self.virgin check because we need to let the caller
+        decide whether or not to write. This is useful if you want to 
+        force an overwrite of a file that might have been changed on 
+        disk while the caller was updating self.contents
+        
+        You can do something like:
+        if not stats.virgin:
+            #
+            #something changed, re-write the file.
+            stats.write()
+
         """
         try:
             self.__log('Writing '+str(self.filename))
@@ -151,6 +164,6 @@ class FileAsObj:
             fileHandle.close()
             return True
         except Excetion as e:
+            self.__log('ERROR in write(self)')
             self.Errors.append(e)
             return False
-

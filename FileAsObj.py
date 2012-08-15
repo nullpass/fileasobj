@@ -7,7 +7,9 @@ fileasobj.py - Manage a local file as an object. Store contents in a
 
 nullpass, 2012
 
-2012.08.xx - Initial release
+2012.08.15 - Full conversion to portability, added .read()
+2012.07.20 - Initial release
+
 
 ______________________
 Example:
@@ -39,7 +41,7 @@ else:
 # contents would then be: ['valid entry', '  # will read()/write() this entry', 'site.ltd', 'foo.bar', '.lol', 'foo', 'bar']
 
 """
-__version__ = '1.b.0'
+__version__ = '1.0.0'
 
 import sys
 import os

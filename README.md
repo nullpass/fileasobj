@@ -3,7 +3,8 @@ py-psl
 
 Public-able code, Python
 
-This repo contains Python code I've written which is not covered by an NDA and is safe for publish. As with all code, though, use at your own risk.
+This repo contains Python code I've written which is not covered by an NDA and is safe for publish. <br>
+**As with all code, though, use at your own risk.**
 
 FileAsObj.py - Manage a file as object, file contents stored in a list.
 

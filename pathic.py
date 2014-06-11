@@ -17,7 +17,7 @@ h57GfUVnEe3pRoVq
 8tkLCmLm8Ze52djQ
 
 """
-___version___="2.0.1"
+___version___="2.0.2"
 import random
 import time
 import datetime
@@ -45,7 +45,7 @@ def grow():
     """
     #
     # Define friendly root string
-    Root = "abcdefghijkmnopqrstuvwxyzQWERTYUPLKJHGFDSAZXCVBNM92345678"
+    Root = "abcdefghijkmopqrstuvwxyzQWERTYUPLKJHGFDAZXCVN92345678"
     #
     # Convert root to a list by character
     Items = list(Root)

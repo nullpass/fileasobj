@@ -17,7 +17,7 @@ h57GfUVnEe3pRoVq
 8tkLCmLm8Ze52djQ
 
 """
-___version___="2.0.2"
+___version___="2.0.3"
 import random
 import time
 import datetime
@@ -25,6 +25,7 @@ from sys import argv
 
 def planter():
     """
+    
     Create an integer for random.seed to use without using any random methods.
     
     %f 	Microsecond as a decimal number [0,999999], zero-padded on the left
@@ -85,54 +86,39 @@ def grow():
 def border():
     """
     
-    Generate a random border, return as list containing integers.
-    Put lower number first. 
-    
-    If both values match, fail. The calling loop will try again.
+    Return a random border from a list of valid borders as str.     
     
     """
+    Borders = [ [1,2] , [1,3] , [2,3] ]
     random.seed(planter())
-    a = random.randint(1, 3)
-
-    random.seed(planter())
-    b = random.randint(1, 3)
-    if a == b:
-        return False
-    if a < b:
-        R=[a,b]
-    if b < a:
-        R=[b,a]
-    return R
+    return str(random.choice(Borders))
     
 def hat():
     """
     
-    Return a randomly chosen hat size as int, must be even number.
+    Return a randomly chosen hat size as str, must be even number.
     
     """
     random.seed(planter())
     R = random.randrange(2, 14, 2)
-    return R
+    return str(R)
     
 def main():
+    """
+    """
     D = {}
-    D['border'] = False
-    while not D['border']:
-        #
-        # Keep trying to set border until values are different.
-        D['border'] = border()
+    Base = ""
+    D['border'] = border()
     D['hatSize'] = hat()
     D['key1'] = grow()
     D['key2'] = grow()
     D['key3'] = grow()
     if argv[1:]:
         Base = argv[1]
-    else:
-        Base = ""
     if D:
-        print "pathic - "+Base
+        print "pathic - %s " % Base
         print ""
-        print str(D['hatSize'])+" @ "+str(D['border'])
+        print "%s @ %s" % ( D['hatSize'], D['border'] )
         print D['key1']
         print D['key2']
         print D['key3']

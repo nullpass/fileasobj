@@ -6,6 +6,20 @@ Written to handle files that contain only text data, good for when you cannot or
 * Not useful for config files.
 * Written by a SysAdmin who needed to treat files like databases.
 
+### quick and dirty examples
+* Read /data/input.txt  
+`from fileasobj import FileAsObj`  
+`my_file = FileAsObj(os.path.join(os.sep,'data','input.txt'))`  
+
+* Read /etc/hosts verbatim (retain comments)  
+`from fileasobj import FileAsObj`  
+`my_file = FileAsObj(os.path.join(os.sep,'etc','hosts'), verbose=True)`  
+
+* Find (and show) the lines containing localhost in /etc/hosts  
+`from fileasobj import FileAsObj`  
+`my_file = FileAsObj(os.path.join(os.sep,'etc','hosts'), verbose=True)`  
+`print(my_file.grep('localhost'))`  
+
 
 ### An ever-so-slightly-non-apocryphal non-minor version history:
 * 2014.12.02 - V4, search methods can now return lists and .rm works on lists

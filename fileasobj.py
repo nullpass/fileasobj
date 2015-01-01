@@ -1,6 +1,5 @@
 #!/usr/bin/env python3 -B
 # -*- coding: utf-8 -*-
-#  pylint: disable=line-too-long
 
 """
 fileasobj.py - Manage a local file as an object. Store contents in a unique list and ignore commented lines.
@@ -10,7 +9,7 @@ Written to handle files that contain only text data, good for when you cannot or
     Written by a SysAdmin who needed to treat files like databases.
 
     nullpass, 2012
-    https://github.com/nullpass/npnutils
+    https://github.com/nullpass/fileasobj
 
 Methods:
     .grep    find first occurance of substring in file
@@ -74,10 +73,14 @@ Testing:
 TODO:
     4.1:
         Let .replace() accept list() as argument for 'old'
+    5.x:
+        + .append
+        + .save(), calls write
+        + __add__ calls .append
 
 
 """
-__version__ = '4.0.4'
+__version__ = '4.0.5'
 
 import os
 from platform import node
@@ -87,7 +90,6 @@ import sys
 sys.dont_write_bytecode = True
 
 class FileAsObj(object):
-    # ylint: disable=too-many-instance-attributes
     """
     Manage a file as an object-
             -For when you just can't be bothered to use a real database.
@@ -182,7 +184,6 @@ class FileAsObj(object):
         return
 
     def read(self, given_file, verbose=False):
-        # pylint: disable=broad-except
         """
         Read given_file to self.contents, ignoring comments and duplicate lines.
         WILL add a line if it starts with a space or tab but has a # later in
@@ -253,7 +254,6 @@ class FileAsObj(object):
         return False
 
     def rm(self, this):
-        # pylint: disable=invalid-name
         """
         Remove all occurrences of 'this' from contents
             where 'this' is an entire line.
@@ -281,7 +281,6 @@ class FileAsObj(object):
         return True
 
     def write(self):
-        # pylint: disable=broad-except
         """
         write self.contents to self.filename
         self.filename was defined during .read()
@@ -331,7 +330,6 @@ class FileAsObj(object):
         return False
 
     def egrep(self, pattern):
-        # pylint: disable=broad-except
         """
         REGEX search for pattern in file
 

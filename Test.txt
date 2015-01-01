@@ -1,0 +1,25 @@
+#/etc/hosts
+# This is a test hosts file
+#
+#1
+127.0.0.1 localhost.localdomain localhost
+
+10.0.0.1 web01 web01.example.com
+
+172.19.18.17    freebird.example.com
+
+#comment
+
+    #spaced comment
+    # la deed da
+
+
+192.168.192.168 h0stname.example.tld    h0stname
+10.10.10.10     hostname.example.tld    hostname
+
+10.2.3.4    mail01 mail01.example.tld
+10.2.9.4    webmail01 webmail01.example.tld
+10.2.5.2    www01   www01.example.tld
+#172.8.8.8    www01   www01.example.tld
+#
+#

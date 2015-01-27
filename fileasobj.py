@@ -57,6 +57,7 @@ Attributes you usually care about:
                     on duplicate lines.
 
 An ever-so-slightly-non-apocryphal non-minor version history:
+    2015.01.27 - .replace() now accepts list for param 'old'.
     2014.12.02 - V4, search methods can now return lists and .rm works on lists
     2014.09.09 - V3, added .replace(), removed .dump() and .inventory()
     2014.08.14 - Finally added __str__
@@ -71,8 +72,6 @@ Testing:
 
 
 TODO:
-    4.1:
-        Let .replace() accept list() as argument for 'old'
     5.x:
         Remove all exception catching and error log.
         Replace critical error log with raise.
@@ -82,7 +81,7 @@ TODO:
 
 
 """
-__version__ = '4.0.5'
+__version__ = '4.1.0'
 
 import os
 from platform import node
@@ -362,18 +361,24 @@ class FileAsObj(object):
         """
         Replace all lines of file that match 'old' with 'new'
 
-        The fact that this method (and .rm) work on duplicate matches
-        only matters if you _init_ the file with verbose=True because
-        .read() strips out duplicates by default.
+        Will replace duplicates if found.
+
+        :param old: False, list of strings, or string.
+        :param new: string
         """
-        self.__log('Call to replace "{0}" with "{1}" in {2}'.format(old, new, self.filename))
-        if old not in self.contents:
-            self.__log('"{0}" not found in {1}'.format(old, self.filename))
+        self.__log('Replace "{0}" with "{1}" in {2}'.format(old, new, self.filename))
+        if old is False:
             return False
-        #
-        while old in self.contents:
-            index = self.contents.index(old)
-            self.virgin = False
-            self.contents.remove(old)
-            self.contents.insert(index, new)
+        if isinstance(old, str):
+            old = old.split('\n')
+        if not isinstance(old, list):
+            raise ValueError('Argument "old" not a string, list or False, was {0}'.format(type(old)))
+        for this in old:
+            if not isinstance(this, str):
+                raise ValueError('{0} is not a string'.format(this))
+            while this in self.contents:
+                index = self.contents.index(this)
+                self.virgin = False
+                self.contents.remove(this)
+                self.contents.insert(index, new)
         return True

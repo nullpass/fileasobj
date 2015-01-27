@@ -4,9 +4,10 @@ import fileasobj
 test_file = fileasobj.FileAsObj('File does not exist')
 print(test_file.trace)
 
-#test_file = fileasobj.FileAsObj('Test.txt', verbose=True)
-test_file = fileasobj.FileAsObj('Test.txt')
-print(test_file.trace)
+test_file = fileasobj.FileAsObj('Test.txt', verbose=True)
+# test_file = fileasobj.FileAsObj('Test.txt')
+print(test_file)
+# print(test_file.trace)
 
 x = 'w.*rd'
 print('Find {0}'.format(x))
@@ -78,11 +79,10 @@ print('---')
 
 x = '#'
 print('Remove whole line "{0}" from {1}, RESULT={2}'.format(
-        x,
-        test_file.grep(x),
-        test_file.rm(x)
-        )
-      )
+    x,
+    test_file.grep(x),
+    test_file.rm(x))
+)
 print(test_file.grep(x))
 print('---')
 
@@ -92,22 +92,13 @@ print('Replace {0} with {1}'.format(old, new))
 print(test_file.replace(old, new))
 print('---')
 
-# Replace does not yet support lists as input
-#old = test_file.egrep('^[ ]+#.*')
-#new = '#'
-#print('Replace {0} with {0}'.format(old, new))
-#print(test_file.replace(old, new))
-# so instead...
 x = '^[ ]+#.*'
 print('Remove {0} from {1}, RESULT={2}'.format(
-        x,
-        test_file.egrep(x),
-        test_file.rm(test_file.egrep(x))
-        )
-      )
+    x,
+    test_file.egrep(x),
+    test_file.rm(test_file.egrep(x)))
+)
 print('---')
-
-
 
 
 x = '#FOO'
@@ -124,10 +115,10 @@ print('non-unique Add line {0}'.format(x))
 print(test_file.add(x, unique=False))
 
 
+x = ['#', '# ', '#1']
+y = '##'
+print('replace {0} with {1}'.format(x, y))
+print(test_file.replace(x, y))
 
-
-
-#print(test_file)
-#print(test_file.trace)
-
-
+print(test_file)
+# print(test_file.trace)

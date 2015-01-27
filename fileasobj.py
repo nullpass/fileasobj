@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 -B
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -74,6 +74,8 @@ TODO:
     4.1:
         Let .replace() accept list() as argument for 'old'
     5.x:
+        Remove all exception catching and error log.
+        Replace critical error log with raise.
         + .append
         + .save(), calls write
         + __add__ calls .append
@@ -88,6 +90,7 @@ import time
 import re
 import sys
 sys.dont_write_bytecode = True
+
 
 class FileAsObj(object):
     """
@@ -243,7 +246,7 @@ class FileAsObj(object):
         If unique is False will add regardless of contents.
         """
         self.__log('Call to add "{0}" to {1}; unique={2}'.format(line, self.filename, unique))
-        if unique == False:
+        if unique is False:
             self.contents.append(line)
             self.virgin = False
             return True

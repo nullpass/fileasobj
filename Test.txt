@@ -22,4 +22,14 @@
 10.2.5.2    www01   www01.example.tld
 #172.8.8.8    www01   www01.example.tld
 #
+Checking for __contains__ functionality 123
+#
+
+# A bunch of dupliate empty comment lines....
+#
+#
+#
+#
+#
+#
 #

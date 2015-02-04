@@ -335,3 +335,6 @@ class FileAsObj(object):
         ex: if 'this' in myfile: do(stuff)
         """
         return self.check(this)
+
+    def __iter__(self):
+        return self.contents.__iter__()

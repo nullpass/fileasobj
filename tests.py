@@ -12,7 +12,14 @@ except FileNotFoundError as msg:
 
 test_file = FileAsObj('Test.txt', verbose=True)
 
+#
+# test iterable
+for this in test_file:
+    print(this)
+
+
 print(test_file.birthday)
+
 
 # test_file = FileAsObj('Test.txt')
 # print(test_file)
@@ -156,3 +163,4 @@ test_file.rm(test_file.grep('#'))
 
 print(test_file)
 print(test_file.log)
+

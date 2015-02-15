@@ -338,3 +338,34 @@ class FileAsObj(object):
 
     def __iter__(self):
         return self.contents.__iter__()
+
+
+class FileAsList(list):
+    """
+    To approach the problem from the devel side (instead of the sysadmin side), FileAsObj could be written as this.
+    """
+    def read(self, file):
+        """
+        Read contents of `file`
+        """
+        with open(file) as handle:
+            for line in handle:
+                self.append(line)
+
+    def grep(self, needle):
+        """
+        Return a list of lines containing `needle`
+        """
+        result = list()
+        for line in self:
+            if needle in line:
+                result.append(line)
+        return result
+
+    def save(self, file):
+        """
+        Write contents to `file`.
+        """
+        with open(file, 'w') as handle:
+            for this_line in self:
+                handle.write(this_line)

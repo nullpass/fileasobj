@@ -28,8 +28,8 @@ Written to handle files that contain only text data, good for when you cannot or
 ```
 
 ### Methods:
-* .grep    find first occurance of substring in file
-* .egrep   regex-find first occurance of substring in file (Remember to use '.*', not just '*')
+* .grep    find first occurrence of substring in file
+* .egrep   regex-find first occurrence of substring in file (Remember to use '.*', not just '*')
 * .add     Add given line to end of file
 * .rm      Remove a line from file, give entire matching line.
 * .check   Return line if line is in file, else return False
@@ -54,10 +54,10 @@ preserved. Please remember that .rm() and .replace() will work on duplicate line
  * 2012.07.20 - Initial release
 
 ### Testing:
-I write in Python 3.4x and occationally do testing in 2.6 and 2.7. This module /should/ work with anything between 2.6 
-and 3.4+ but no promises.  
-./tests.py should exit status 0
+* I write in Python 3.4x and occasionally do testing in 2.6 and 2.7. This module /should/ work with anything between 2.6
+ and 3.4+ but no promises.
+* `./tests/test_fileasobj.py` is a standard unit test.
 
 
 ### TODO:
-`this line left intentionally blank hur hur`
+`Write tests for FileAsList`
